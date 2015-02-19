@@ -10,35 +10,35 @@ configure :development do
 end
 
 get '/' do
-  # redirect '/artists'
+  redirect '/artists'
 end
 
-get '/artists' do
+get '/artists' do                                     #display index
   @artits = Artist.all
   erb :"artists/index"
 end
 
-get '/artists/new' do
+get '/artists/new' do                                 #display create
   erb :"artists/new"
 end
 
-get '/artists/:id' do
+get '/artists/:id' do                                 #display specific
   @artist = Artist.find(params[:id])
   erb :"artists/show"
 end
 
-get '/artists/:id/edit' do
+get '/artists/:id/edit' do                            #display edit
   @artist = Artist.find(params[:id])
   erb :"artists/edit"
 
 
 
-post '/artists' do
+post '/artists' do                                    #create
   Artist.create({:name => params[:artist_name]})
   redirect '/artists'
 end
 
-put '/artists/:id' do
+put '/artists/:id' do                                 #update
   id = params[:id]
   artist = Artist.find(id)
   artist.name = params[':artist_name']
@@ -46,7 +46,7 @@ put '/artists/:id' do
   redirect '/artists/#{id}'
 end
 
-delete '/artists/:id' do
+delete '/artists/:id' do                              #destroy
   artist = Artist.find(id)
   artist.destroy
   redirect '/artists'
