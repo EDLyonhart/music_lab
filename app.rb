@@ -1,7 +1,6 @@
 require 'sinatra'
-require 'sinatra/reloader'
-require 'pry'
-require 'pg'
+require 'sinatra/activerecord'
+require './models/musician'
 
 require 'better_errors'
 
@@ -10,40 +9,57 @@ configure :development do
   BetterErrors.application_root = __dir__
 end
 
-# before do
-#   @conn = settings.conn
-#   Musician.conn = @conn
-# end
-
-
 get '/' do
-  redirect '/musicians'
+  # redirect '/artists'
 end
 
-get '/musicians' do               #display index
-  erb :index
+get '/artists' do
+  @artits = Artist.all
+  erb :"artists/index"
 end
 
-get '/musicians/add' do           #display add
-  erb :add
+get '/artists/new' do
+  erb :"artists/new"
 end
 
-get '/musicians/:id' do           #display single musician
-  erb :show
+get '/artists/:id' do
+  @artist = Artist.find(params[:id])
+  erb :"artists/show"
 end
 
-get '/musicians/:id/edit' do      #display edit
-  erb :edit
+get '/artists/:id/edit' do
+  @artist = Artist.find(params[:id])
+  erb :"artists/edit"
+
+
+
+post '/artists' do
+  Artist.create({:name => params[:artist_name]})
+  redirect '/artists'
 end
 
-post '/musicians/add' do          #create new musician
-redirect '/musicians'
+put '/artists/:id' do
+  id = params[:id]
+  artist = Artist.find(id)
+  artist.name = params[':artist_name']
+  artist.save
+  redirect '/artists/#{id}'
 end
 
-put '/musicians/:id/edit' do      #edit musician
-redirect '/musicians/:id'
+delete '/artists/:id' do
+  artist = Artist.find(id)
+  artist.destroy
+  redirect '/artists'
 end
 
-delete '/musicians/:id' do        #destroy musician
-redirect '/musicians'
-end
+
+
+
+
+
+
+
+
+
+
+
